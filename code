@@ -1,0 +1,42 @@
+### Example Verilog Code for 4-to-2 and 8-to-3 Encoders
+```verilog
+// 4-to-2 Encoder Module
+module encoder_4to2 (
+    input wire [3:0] I,
+    output wire [1:0] Y
+);
+    assign Y[1] = I[2] | I[3];
+    assign Y[0] = I[1] | I[3];
+endmodule
+
+// 8-to-3 Encoder Module
+module encoder_8to3 (
+    input wire [7:0] I,
+    output wire [2:0] Y
+);
+    assign Y[2] = I[4] | I[5] | I[6] | I[7];
+    assign Y[1] = I[2] | I[3] | I[6] | I[7];
+    assign Y[0] = I[1] | I[3] | I[5] | I[7];
+endmodule
+
+// Testbench
+module testbench;
+    reg [3:0] I4;
+    reg [7:0] I8;
+    wire [1:0] Y4;
+    wire [2:0] Y8;
+
+    encoder_4to2 enc4 (.I(I4), .Y(Y4));
+    encoder_8to3 enc8 (.I(I8), .Y(Y8));
+
+    initial begin
+        $monitor("4-to-2: I=%b | Y=%b || 8-to-3: I=%b | Y=%b", I4, Y4, I8, Y8);
+        
+        I4 = 4'b0001; I8 = 8'b00000001; #10;
+        I4 = 4'b0010; I8 = 8'b00000100; #10;
+        I4 = 4'b1000; I8 = 8'b10000000; #10;
+        
+        $finish;
+    end
+endmodule
+```
